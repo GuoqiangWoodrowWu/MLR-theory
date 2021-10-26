@@ -51,14 +51,6 @@ for index_cv = 1: K_fold
     [ pre_F_vali ] = Predict_score( X_vali, W );
 
     [ Ranking_Loss ] = Evaluation_Metrics( pre_F_vali, Y_vali );
-    
-    
-    [risk_train, B_train] = calculate_risk(X_train, Y_train, W, surrogate_loss_option);
-    [risk_vali, B_vali] = calculate_risk(X_vali, Y_vali, W, surrogate_loss_option);
-    B_train
-    B_vali    
-    
-    [bound_value] = calculate_bound(X_train, Y_train, W, surrogate_loss_option);
 
     ranking_loss(index_cv) = Ranking_Loss;
 

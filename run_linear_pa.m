@@ -3,10 +3,10 @@ close all;
 clc;
 
 % dataset name
-dataset_name = 'delicious_20_random';
+dataset_name = 'emotions';
 path_main = pwd;
 path_save = strcat(path_main, filesep, 'Results');
-path_data = strcat(path_main, filesep, 'Datasets_synthetic');
+path_data = strcat(path_main, filesep, 'Datasets');
 file_save = strcat(path_save, filesep, 'Results_linear_pa.csv');
 
 % setting
@@ -14,7 +14,6 @@ rand('seed', 2^40);
 result = [];
 K_fold = 3; % cross-validation: 3-fold
 lambda = 0.01;
-surrogate_loss_option = 'surrogate_loss_pa';
 
 % Loading the dataset
 file_name = strcat(path_data, filesep, dataset_name, '.mat');
@@ -28,8 +27,8 @@ num_feature_origin = size(X_all, 2);
 X_all(:, num_feature_origin + 1) = 1;
 
 %normalization
-% [X_all, PS] = mapstd(X_all', 0, 1);
-% X_all = X_all';
+[X_all, PS] = mapstd(X_all', 0, 1);
+X_all = X_all';
 
 % Shuffle the dataset
 [num_samples, num_feature] = size(X_all);
@@ -49,15 +48,15 @@ for index_cv = 1: K_fold
     alpha = 0.01;
     [ W, obj ] = train_logistic_rank_SVRG_BB( X_train, Y_train, lambda, alpha ); %logstic ranking loss
     [ pre_F_vali ] = Predict_score( X_vali, W );
+    
+    [ pre_F_train ] = Predict_score( X_train, W );
 
     [ Ranking_Loss ] = Evaluation_Metrics( pre_F_vali, Y_vali );
     
-    [risk_train, B_train] = calculate_risk(X_train, Y_train, W, surrogate_loss_option);
-    [risk_vali, B_vali] = calculate_risk(X_vali, Y_vali, W, surrogate_loss_option);
+    [surrogate_pairwise_risk_train, B_train] = Surrogate_pairwise_risk(pre_F_train, Y_train);
+    [surrogate_pairwise_risk_vali, B_vali] = Surrogate_pairwise_risk(pre_F_vali, Y_vali);
     B_train
     B_vali
-    
-    [bound_value] = calculate_bound(X_train, Y_train, W, surrogate_loss_option);
 
     ranking_loss(index_cv) = Ranking_Loss;
 
