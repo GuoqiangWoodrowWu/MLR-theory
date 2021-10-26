@@ -14,7 +14,7 @@ rand('seed', 2^40);
 result = [];
 K_fold = 3; % cross-validation: 3-fold
 lambda = 0.01;
-surrogate_loss_option = 'surrogate_loss_u2';
+surrogate_loss_option = 'surrogate_loss_u3';
 
 % Loading the dataset
 file_name = strcat(path_data, filesep, dataset_name, '.mat');
@@ -49,14 +49,8 @@ for index_cv = 1: K_fold
     alpha = 0.01;
     [ W, obj ] = train_logistic_cost_sensitive_SVRG_BB( X_train, Y_train, lambda, alpha, surrogate_loss_option );
     [ pre_F_vali ] = Predict_score( X_vali, W );
-    
-    [ pre_F_train ] = Predict_score( X_train, W );
 
     [ Ranking_Loss ] = Evaluation_Metrics( pre_F_vali, Y_vali );
-    [surrogate_univariate_risk_train, B_train] = Surrogate_univariate_risk(pre_F_train, Y_train, surrogate_loss_option);
-    [surrogate_univariate_risk_vali, B_vali] = Surrogate_univariate_risk(pre_F_vali, Y_vali, surrogate_loss_option);
-    B_train
-    B_vali    
 
     ranking_loss(index_cv) = Ranking_Loss;
 

@@ -48,15 +48,8 @@ for index_cv = 1: K_fold
     alpha = 0.01;
     [ W, obj ] = train_logistic_rank_SVRG_BB( X_train, Y_train, lambda, alpha ); %logstic ranking loss
     [ pre_F_vali ] = Predict_score( X_vali, W );
-    
-    [ pre_F_train ] = Predict_score( X_train, W );
 
     [ Ranking_Loss ] = Evaluation_Metrics( pre_F_vali, Y_vali );
-    
-    [surrogate_pairwise_risk_train, B_train] = Surrogate_pairwise_risk(pre_F_train, Y_train);
-    [surrogate_pairwise_risk_vali, B_vali] = Surrogate_pairwise_risk(pre_F_vali, Y_vali);
-    B_train
-    B_vali
 
     ranking_loss(index_cv) = Ranking_Loss;
 
