@@ -1,4 +1,5 @@
-# Source code description
+# Rethinking and Reweighting the Univariate Losses for Multi-Label Ranking: Consistency and Generalization
+This repository is the official implementation of "Guoqiang Wu\*, Chongxuan Li\*, Kun Xu and Jun Zhu. Rethinking and Reweighting the Univariate Losses for Multi-Label Ranking: Consistency and Generalization" accepted at NeurIPS 2021.
 ## Programming Language
 The source code is written by Matlab
 ## File description
